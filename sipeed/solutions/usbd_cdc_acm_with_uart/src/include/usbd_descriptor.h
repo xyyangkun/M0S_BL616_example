@@ -20,8 +20,53 @@
 /*!< global descriptor */
 static const uint8_t usbd_descriptor[] = {
     USB_DEVICE_DESCRIPTOR_INIT(USB_2_0, 0xEF, 0x02, 0x01, USBD_VID, USBD_PID, 0x0100, 0x01),
-    USB_CONFIG_DESCRIPTOR_INIT(USB_CONFIG_SIZE, 0x02, 0x01, USB_CONFIG_BUS_POWERED, USBD_MAX_POWER),
-    CDC_ACM_DESCRIPTOR_INIT(0x00, CDC_INT_EP, CDC_OUT_EP, CDC_IN_EP, 0x02),
+    //USB_CONFIG_DESCRIPTOR_INIT(USB_CONFIG_SIZE, 0x02, 0x01, USB_CONFIG_BUS_POWERED, USBD_MAX_POWER),
+    //CDC_ACM_DESCRIPTOR_INIT(0x00, CDC_INT_EP, CDC_OUT_EP, CDC_IN_EP, 0x02),   //8
+
+
+	// config descriptor
+		0x09,                              /* bLength */
+	    0x02U, /* bDescriptorType */
+	    ((9 + (9 + 7 + 7)) & 0xFF), (((9 + ( 9 + 7 + 7)) >> 8) & 0xFF),               /* wTotalLength */                                                  \
+	    0x01,                    /* bNumInterfaces */
+	    0x01,               /* bConfigurationValue */
+	    0x00,                              /* iConfiguration */
+	    0x80,                      /* bmAttributes */
+	    ((100) / 2),
+
+
+		// interface descriptor
+		0x09,
+		0x04, // interface descriptor
+		0x02,
+		0x00,
+		0x02,
+		0xff,
+		0xff,
+		0xff,
+		0x02,
+
+		// endpoint descriptor
+		0x07, // lend
+		0x05, // endpoint descriptor
+		0x01, // direction = out endpointid=1
+		0x02, // transferType = Bulk
+		0x00,
+		0x02, // max 512 bytes
+		0x00, // never naks
+
+		// endpoint descriptor
+		0x07, // len
+		0x05, // endpoint descriptor
+		0x83, // direction = in, endpointid=3
+		0x02,
+		0x00,
+		0x02,// max 512 bytes
+		0x00,
+
+
+
+
     ///////////////////////////////////////
     /// string0 descriptor
     ///////////////////////////////////////

@@ -58,8 +58,8 @@ void usbd_cdc_acm_template_init(void)
 
     static struct usbd_interface intf0_cdc_ctrl;
     static struct usbd_interface intf1_cdc_data;
-    usbd_add_interface(usbd_cdc_acm_init_intf(&intf0_cdc_ctrl));
-    usbd_add_interface(usbd_cdc_acm_init_intf(&intf1_cdc_data));
+    //usbd_add_interface(usbd_cdc_acm_init_intf(&intf0_cdc_ctrl));
+    //usbd_add_interface(usbd_cdc_acm_init_intf(&intf1_cdc_data));
 
     /*!< endpoint call back */
     struct usbd_endpoint cdc_out_ep = {
