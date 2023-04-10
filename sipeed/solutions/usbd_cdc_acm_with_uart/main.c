@@ -3,6 +3,8 @@
 
 #include "board.h"
 
+#define  CONFIG_LOG_LEVEL 8
+#define CONFIG_USB_DBG_LEVEL 8
 #define DBG_TAG "MAIN"
 #include "log.h"
 
@@ -34,6 +36,11 @@ int main(void)
         Ring_Buffer_Init(&uart1_rx_rb, uartx_rx_buffer, sizeof(uartx_rx_buffer), NULL, NULL);
     }
     uart1_init();
+    USB_LOG_INFO(" debug info\r\n");
+
+    LOG_D(" debug info\r\n");
+
+    USB_LOG_DBG("actual in len 1\r\n");
 
     extern void usbd_cdc_acm_template_init(void);
     usbd_cdc_acm_template_init();

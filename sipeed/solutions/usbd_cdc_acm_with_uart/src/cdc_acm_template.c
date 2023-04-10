@@ -15,7 +15,23 @@ static void usbd_cdc_acm_bulk_out(uint8_t ep, uint32_t nbytes)
     assert(ep == CDC_OUT_EP);
     USB_LOG_DBG("actual out len:%d\r\n", nbytes);
 
-    usbd_cdc_acm_bulk_out_cb(cdc_out_buffer, nbytes, ep);
+
+    //usbd_cdc_acm_bulk_out_cb(cdc_out_buffer, nbytes, ep);
+
+//////////////////////////////////////////////////////////////
+    USB_LOG_DBG("yk debug will write out:%d\r\n", nbytes);
+    for (size_t i = 0; i < nbytes; i++) {
+        USB_LOG_DBG("%c", cdc_out_buffer[i]);
+    }  // 收到什么数据返回什么数据
+    USB_LOG_DBG("\r\n");
+    #if 0
+    for (size_t i = 0; i < nbytes; i++) {
+        cdc_out_buffer[nbytes+i] = 'a' + i;
+    }
+    nbytes = nbytes*2;   // 更改数据后返回回去
+    #endif
+    usbd_ep_start_write(CDC_IN_EP, cdc_out_buffer, nbytes);
+//////////////////////////////////////////////////////////////
 
     /* setup next out ep read transfer */
     usbd_ep_start_read(ep, cdc_out_buffer, sizeof(cdc_out_buffer));
@@ -39,9 +55,9 @@ __WEAK void usbd_cdc_acm_bulk_out_cb(uint8_t *buf, size_t len, uint8_t ep)
 {
     assert(ep == CDC_OUT_EP);
     for (size_t i = 0; i < len; i++) {
-        USB_LOG_RAW("%c", buf[i]);
+        USB_LOG_DBG("%c", buf[i]);
     }
-    USB_LOG_RAW("\r\n");
+    USB_LOG_DBG("\r\n");
     usbd_ep_start_write(CDC_IN_EP, buf, len);
 }
 
@@ -58,16 +74,21 @@ void usbd_cdc_acm_template_init(void)
 
     static struct usbd_interface intf0_cdc_ctrl;
     static struct usbd_interface intf1_cdc_data;
-    //usbd_add_interface(usbd_cdc_acm_init_intf(&intf0_cdc_ctrl));
-    //usbd_add_interface(usbd_cdc_acm_init_intf(&intf1_cdc_data));
+    usbd_add_interface(usbd_cdc_acm_init_intf(&intf0_cdc_ctrl));
+    usbd_add_interface(usbd_cdc_acm_init_intf(&intf1_cdc_data));
+
+
+/*!< endpoint address */
+#define MY_IN_EP         0x83
+#define MY_OUT_EP        0x01
 
     /*!< endpoint call back */
     struct usbd_endpoint cdc_out_ep = {
-        .ep_addr = CDC_OUT_EP,
+        .ep_addr = MY_OUT_EP,
         .ep_cb = usbd_cdc_acm_bulk_out
     };
     struct usbd_endpoint cdc_in_ep = {
-        .ep_addr = CDC_IN_EP,
+        .ep_addr = MY_IN_EP,
         .ep_cb = usbd_cdc_acm_bulk_in
     };
     usbd_add_endpoint(&cdc_out_ep);

@@ -8,6 +8,8 @@
 
 #include <stdio.h>
 
+#define CONFIG_USB_DBG_LEVEL 8
+
 /* DEBUG level */
 #define USB_DBG_ERROR   0
 #define USB_DBG_WARNING 1
